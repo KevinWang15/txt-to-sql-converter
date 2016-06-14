@@ -8,10 +8,10 @@ converter({
         return {
             tradeID: field[1],
             stuID: field[2],
-            posID: field[9],
             tradeDate: field[6],
             tradeTime: field[7],
-            tradeAmount: ((+field[8]) * 100).toFixed(0)
+            tradeAmount: ((+field[8]) * 100).toFixed(0),
+            posID: field[9]
         };
     },
     attrType: {

@@ -13,6 +13,11 @@ NodeJS space-separated database text file to sql insert statements converter (Ex
 ...
 ```
 
+## Installation
+
+    npm install --save git+https://github.com/KevinWang15/txt-to-sql-converter.git
+
+
 ## Output: .sql file with insert statements (output/trade.sql)
 
 ```sql
@@ -45,10 +50,10 @@ converter({
         return {
             tradeID: field[1],
             stuID: field[2],
-            posID: field[9],
             tradeDate: field[6],
             tradeTime: field[7],
-            tradeAmount: ((+field[8]) * 100).toFixed(0)
+            tradeAmount: ((+field[8]) * 100).toFixed(0),
+            posID: field[9]
         };
     },
     attrType: {
@@ -81,12 +86,8 @@ converter({
 ```
 
 
-## Run
-Increase memory limit, run with 
+## Memory Limit
+All data are read into the memory in the beginning, if you wish to increase the memory limit of your nodeJS script, run with 
 ```
-node --max_old_space_size=1000000 index.js
+node --max_old_space_size=1000000 your_script.js
 ```
-
-## TODO
-1. Use stream for reading file, avoid high memory usage.
-2. Make it a npm package/cli tool.

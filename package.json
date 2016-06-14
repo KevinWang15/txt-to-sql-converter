@@ -2,7 +2,7 @@
   "name": "txt-to-sql-converter",
   "version": "1.0.0",
   "description": "NodeJS space-separated database text file to sql insert statements converter ",
-  "main": "index.js",
+  "main": "txt-to-sql-converter.js",
   "dependencies": {
     "iconv-lite": "latest"
   },
