@@ -136,7 +136,6 @@ function txtToSqlConverter(config) {
         if (rowCount % config.recordsPerStatement != 0)
             writeFile();
 
-        writeStream.close();
     }
 
     rl.on('close', function () {
