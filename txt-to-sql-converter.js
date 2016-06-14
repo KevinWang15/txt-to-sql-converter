@@ -1,5 +1,4 @@
-var fs = require('fs'),
-    readline = require('readline'),
+var readline = require('readline'),
     stream = require('stream'),
     iconv = require('iconv-lite');
 
@@ -22,7 +21,7 @@ function txtToSqlConverter(config) {
 
     var rl = readline.createInterface(
         {
-            input: fs.createReadStream('input/' + input).pipe(iconv.decodeStream(config.encoding || "utf8"))
+            input: config.inputStream.pipe(iconv.decodeStream(config.encoding || "utf8"))
         }
     );
 
@@ -67,15 +66,11 @@ function txtToSqlConverter(config) {
         var tuples = [];
 
         var tableName = buildConfig.tableName;
-        var writeStream = fs.createWriteStream('output/' + tableName + '.sql', {encoding: 'utf8'});
+        var writeStream = buildConfig.outputStream;
         var attrs = buildConfig.attrs;
         var primaryKeys = buildConfig.primaryKeys;
 
-        if (fs.existsSync('output/' + tableName + '.sql'))
-            fs.unlinkSync('output/' + tableName + '.sql');
-
         var rowCount = 0;
-
 
         if (buildConfig.genTableStructure) {
 
@@ -140,6 +135,8 @@ function txtToSqlConverter(config) {
 
         if (rowCount % config.recordsPerStatement != 0)
             writeFile();
+
+        writeStream.close();
     }
 
     rl.on('close', function () {
