@@ -44,7 +44,7 @@ converter({
         //what are the attributes (set according to the keys in attrMap)
         attrs: ['tradeID', 'stuID', 'posID', 'tradeDate', 'tradeTime', 'tradeAmount'],
         //the primary key? for DDL, also for eliminating duplicates
-        primaryKeys: ['tradeID'],
+        primaryKeys: ['tradeID', 'stuID'],
         //do you wish to generate DDL as well?
         genTableStructure: true,
         //where to output the results, usually a txt file.
@@ -119,18 +119,25 @@ converter({
     attrMap: function (field) {
         return {
             shopID: field[1],
-            POSID: field[2],
+            posID: field[2],
             shopName: field[3]
         };
     }
 }).then(function (build) {
     build({
-        tableName: 'shop',
-        attrs: ['shopID', 'POSID', 'shopName'],
-        primaryKeys: ['shopID', 'POSID'],
+        tableName: 'pos',
+        attrs: ['posID', 'shopID'],
+        primaryKeys: ['posID'],
         genTableStructure: true,
-        //In this example, the result is piped to stdout
-        outputStream: process.stdout
+        outputStream: fs.createWriteStream('output/pos.sql', {encoding: 'utf8'})
+    });
+
+    build({
+        tableName: 'shop',
+        attrs: ['shopID', 'shopName'],
+        primaryKeys: ['shopID'],
+        genTableStructure: true,
+        outputStream: fs.createWriteStream('output/shop.sql', {encoding: 'utf8'})
     });
 });
 
