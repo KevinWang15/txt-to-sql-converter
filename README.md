@@ -3,22 +3,32 @@ txt-to-sql-converter
 
 NodeJS space-separated database text file to sql insert statements converter (Experimental).
 
-## Input: space-separated database text file
+## Input: space-separated database text file (input/trade2.txt)
 
 ```
-37918	0811002059	曹星星	3566	信105	140	电子信息工程	11	电子信息学院	2010
-37954	0811002095	张健	2891	信093	140	电子信息工程	11	电子信息学院	2009
-37957	0811002098	赵天立	2976	电信114	134	电气信息大类(电子)	11	电子信息学院	2011
-37967	0811002108	冯杰	3569	通信103	144	通信工程	11	电子信息学院	2010
-37973	0811002114	赵超	2879	集093	137	集成电路设计与集成系统	11	电子信息学院	2009
+169574	79265	许春婷	243020001	一食堂一组	2012-09-18	16:47:28.000	150.00	0007
+169577	75850	吴静	243020001	一食堂一组	2012-09-18	16:48:18.000	150.00	0007
+169580	101116	魏梦	243020002	一食堂二组	2012-09-18	16:52:39.000	150.00	0015
+169583	76312	周经学	243020002	一食堂二组	2012-09-18	16:52:18.000	600.00	0026
 ...
 ```
 
-## Output: .sql file with insert statements 
+## Output: .sql file with insert statements (output/trade.sql)
 
 ```sql
-insert into student (ID,stuID,name,clsID,grade) values (37918,0811002059,"曹星星",3566,2010),(37954,0811002095,"张健",2891,2009),(37957,0811002098,"赵天立",2976,2011),...
-insert into student (ID,stuID,name,clsID,grade) values (41297,0903012023,"徐蕾",224,2009),(41298,0903012024,"陈丽",224,2009),(41299,0903012025,"张蓉",224,2009),...
+DROP TABLE IF EXISTS `trade`;
+CREATE TABLE `trade` (
+    `tradeID` int,
+    `stuID` int,
+    `posID` int,
+    `tradeDate` date,
+    `tradeTime` time,
+    `tradeAmount` int DEFAULT 100,
+    PRIMARY KEY (`tradeID`)
+);
+insert into trade (tradeID,stuID,posID,tradeDate,tradeTime,tradeAmount) values (169574,79265,0007,"2012-09-18","16:47:28.000",15000),(169577,75850,0007,"2012-09-18","16:48:18.000",15000),...
+insert into trade (tradeID,stuID,posID,tradeDate,tradeTime,tradeAmount) values (170209,65643,0178,"2012-09-18","17:00:53.000",80000),(170212,75053,0165,"2012-09-18","17:00:04.000",73000),...
+insert into trade (tradeID,stuID,posID,tradeDate,tradeTime,tradeAmount) values (169181,107797,0131,"2012-09-18","16:46:29.000",10500),(169184,107513,0104,"2012-09-18","16:46:55.000",14700),...
 ...
 ```
 
