@@ -2,11 +2,12 @@ var fs = require('fs'),
     readline = require('readline'),
     stream = require('stream');
 
+const numericTypes = ['int', 'integer', 'tinyint', 'smallint', 'mediumint', 'bigint', 'real', 'decimal', 'numeric', 'float', 'double'];
 
 function txtToSqlConverter(config) {
 
-    if (!config.recordsPerRow)
-        config.recordsPerRow = 100;
+    if (!config.recordsPerStatement)
+        config.recordsPerStatement = 100;
 
     var deferred = Promise.defer();
 
@@ -96,7 +97,10 @@ function txtToSqlConverter(config) {
             var tuple = [];
             var primaryTuple = [];
             attrs.forEach(function (attr) {
-                tuple.push(item[attr]);
+                if (numericTypes.indexOf(config.attrType[attr]) >= 0)
+                    tuple.push(item[attr]);
+                else
+                    tuple.push('"' + item[attr] + '"');
             });
 
             primaryKeys.forEach(function (attr) {
@@ -109,20 +113,16 @@ function txtToSqlConverter(config) {
 
             primaryKeyExists[primaryKeyHash] = true;
 
-            for (var i = 0; i < tuple.length; i++)
-                if (+tuple[i] != tuple[i])
-                    tuple[i] = '"' + tuple[i] + '"';
-
             tuples.push('(' + tuple.join(',') + ')');
 
             rowCount++;
 
-            if (rowCount % config.recordsPerRow == 0)
+            if (rowCount % config.recordsPerStatement == 0)
                 writeFile();
 
         });
 
-        if (rowCount % config.recordsPerRow != 0)
+        if (rowCount % config.recordsPerStatement != 0)
             writeFile();
     }
 

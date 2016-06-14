@@ -5,6 +5,7 @@ var converter = require('./txt-to-sql-converter');
 
 converter({
     input: 'trade2.txt',
+    recordsPerStatement: 200,
     attrMap: function (field) {
         return {
             tradeID: field[1],
@@ -12,10 +13,14 @@ converter({
             posID: field[9],
             tradeDate: field[6],
             tradeTime: field[7],
-            tradeAmount: field[8]
+            tradeAmount: ((+field[8]) * 100).toFixed(0)
         };
     },
-    attrType: {}
+    attrType: {
+        tradeDate: 'date',
+        tradeTime: 'time',
+        tradeAmount: 'int'
+    }
 }).then(function (build) {
     build({
         tableName: 'trade',
@@ -23,6 +28,10 @@ converter({
         primaryKeys: ['tradeID'],
         genTableStructure: true
     });
+
+    //You may decompose database schema,
+    //and build other tables with build(..)
+
 });
 
 
@@ -47,6 +56,9 @@ converter({
 
 converter({
     input: 'students.txt',
+    attrType: {
+        clsName: "text"
+    },
     attrMap: function (field) {
         return {
             ID: field[1],
