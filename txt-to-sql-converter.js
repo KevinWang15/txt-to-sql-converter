@@ -15,6 +15,7 @@ function txtToSqlConverter(config) {
     var list = [];
 
     if (!config.attrType) config.attrType = {};
+    if (!config.defaultValue) config.defaultValue = {};
 
     var regex = null;
     var rl = readline.createInterface({input: fs.createReadStream('input/' + input, {encoding: "utf8"})});
@@ -76,9 +77,16 @@ function txtToSqlConverter(config) {
                 + attrs.map(function (attr) {
                     var attrType = config.attrType[attr];
                     if (attrType == 'text' && primaryKeys.indexOf(attr) >= 0)
-                        attrType = 'varchar(255)'
+                        attrType = 'varchar(255)';
 
-                    return '    `' + attr + '` ' + attrType;
+                    var builder = '    `' + attr + '` ' + attrType;
+
+                    if (!!config.defaultValue[attr])
+                        builder += ' DEFAULT ' + ((numericTypes.indexOf(attrType) >= 0) ? (config.defaultValue[attr]) : '"' + (config.defaultValue[attr]) + '"');
+
+
+                    return builder;
+
                 }).join(',\n')
                 + ',\n    PRIMARY KEY (' + primaryKeys.map(function (val) {
                     return '`' + val + '`';

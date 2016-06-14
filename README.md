@@ -25,51 +25,48 @@ insert into student (ID,stuID,name,clsID,grade) values (41297,0903012023,"徐蕾
 ## Code
 
 ```javascript
-read({
-    input: 'students.txt',
+var converter = require('./txt-to-sql-converter');
+
+converter({
+    input: 'trade2.txt',
+    recordsPerStatement: 200,
     attrMap: function (field) {
         return {
-            ID: field[1],
+            tradeID: field[1],
             stuID: field[2],
-            name: field[3],
-            clsID: field[4],
-            clsName: field[5],
-            deptNo: field[6],
-            deptName: field[7],
-            schID: field[8],
-            schName: field[9],
-            grade: field[10]
+            posID: field[9],
+            tradeDate: field[6],
+            tradeTime: field[7],
+            tradeAmount: ((+field[8]) * 100).toFixed(0)
         };
+    },
+    attrType: {
+        tradeDate: 'date',
+        tradeTime: 'time',
+        tradeAmount: 'int'
+    },
+    defaultValue: {
+        tradeAmount: 100
     }
 }).then(function (build) {
     build({
-        tableName: 'student',
-        attrs: ['ID', 'stuID', 'name', 'clsID', 'grade'],
-        primaryKeys: ['ID', 'stuID'],
+        tableName: 'trade',
+        attrs: ['tradeID', 'stuID', 'posID', 'tradeDate', 'tradeTime', 'tradeAmount'],
+        primaryKeys: ['tradeID'],
         genTableStructure: true
     });
 
-    build({
-        tableName: 'class',
-        attrs: ['clsID', 'clsName', 'deptNo'],
-        primaryKeys: ['clsID'],
-        genTableStructure: true
-    });
+    //build({
+    //   ...
+    //})
+    
+    //...
+    
+    //You may decompose database schema,
+    //and build other tables with build(..)
 
-    build({
-        tableName: 'dept',
-        attrs: ['deptNo', 'deptName', 'schID'],
-        primaryKeys: ['deptNo'],
-        genTableStructure: true
-    });
-
-    build({
-        tableName: 'school',
-        attrs: ['schID', 'schName'],
-        primaryKeys: ['schID'],
-        genTableStructure: true
-    });
 });
+
 ```
 
 

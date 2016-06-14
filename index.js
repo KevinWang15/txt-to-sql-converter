@@ -1,6 +1,3 @@
-//运行方式：
-//  node --max_old_space_size=1000000 index.js
-
 var converter = require('./txt-to-sql-converter');
 
 converter({
@@ -20,6 +17,9 @@ converter({
         tradeDate: 'date',
         tradeTime: 'time',
         tradeAmount: 'int'
+    },
+    defaultValue: {
+        tradeAmount: 100
     }
 }).then(function (build) {
     build({
@@ -28,6 +28,12 @@ converter({
         primaryKeys: ['tradeID'],
         genTableStructure: true
     });
+
+    //build({
+    //   ...
+    //})
+
+    //...
 
     //You may decompose database schema,
     //and build other tables with build(..)
@@ -57,7 +63,7 @@ converter({
 converter({
     input: 'students.txt',
     attrType: {
-        clsName: "text"
+        stuID: 'text'
     },
     attrMap: function (field) {
         return {
