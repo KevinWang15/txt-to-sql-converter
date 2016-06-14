@@ -67,6 +67,7 @@ function txtToSqlConverter(config) {
         var tuples = [];
 
         var tableName = buildConfig.tableName;
+        var writeStream = fs.createWriteStream('output/' + tableName + '.sql', {encoding: 'utf8'});
         var attrs = buildConfig.attrs;
         var primaryKeys = buildConfig.primaryKeys;
 
@@ -75,9 +76,10 @@ function txtToSqlConverter(config) {
 
         var rowCount = 0;
 
+
         if (buildConfig.genTableStructure) {
 
-            fs.appendFileSync('output/' + tableName + '.sql',
+            writeStream.write(
                 'DROP TABLE IF EXISTS `' + tableName + '`;\n' +
                 'CREATE TABLE `' + tableName + '` (\n'
                 + attrs.map(function (attr) {
@@ -103,7 +105,7 @@ function txtToSqlConverter(config) {
 
         function writeFile() {
             var content = 'insert into ' + tableName + ' (' + attrs.join(',') + ') values ' + tuples.join(',') + ';';
-            fs.appendFileSync('output/' + tableName + '.sql', content + '\n');
+            writeStream.write(content + '\n');
             tuples.splice(0);
         }
 
