@@ -1,0 +1,23 @@
+{
+  "name": "txt-to-sql-converter",
+  "version": "1.0.0",
+  "description": "NodeJS space-separated database text file to sql insert statements converter ",
+  "main": "index.js",
+  "dependencies": {
+    "iconv-lite": "latest"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KevinWang15/txt-to-sql-converter.git"
+  },
+  "author": "Kevin Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KevinWang15/txt-to-sql-converter/issues"
+  },
+  "homepage": "https://github.com/KevinWang15/txt-to-sql-converter#readme"
+}

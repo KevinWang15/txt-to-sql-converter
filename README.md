@@ -39,6 +39,7 @@ var converter = require('./txt-to-sql-converter');
 
 converter({
     input: 'trade2.txt',
+    encoding: 'utf8',
     recordsPerStatement: 200,
     attrMap: function (field) {
         return {
@@ -88,5 +89,4 @@ node --max_old_space_size=1000000 index.js
 
 ## TODO
 1. Use stream for reading file, avoid high memory usage.
-2. Support for encoding config.
-3. Make it a npm package/cli tool.
+2. Make it a npm package/cli tool.

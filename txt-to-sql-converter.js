@@ -1,6 +1,7 @@
 var fs = require('fs'),
     readline = require('readline'),
-    stream = require('stream');
+    stream = require('stream'),
+    iconv = require('iconv-lite');
 
 const numericTypes = ['int', 'integer', 'tinyint', 'smallint', 'mediumint', 'bigint', 'real', 'decimal', 'numeric', 'float', 'double'];
 
@@ -18,7 +19,12 @@ function txtToSqlConverter(config) {
     if (!config.defaultValue) config.defaultValue = {};
 
     var regex = null;
-    var rl = readline.createInterface({input: fs.createReadStream('input/' + input, {encoding: "utf8"})});
+
+    var rl = readline.createInterface(
+        {
+            input: fs.createReadStream('input/' + input).pipe(iconv.decodeStream(config.encoding || "utf8"))
+        }
+    );
 
     rl.on('line', function (line) {
         var firstLine = false;

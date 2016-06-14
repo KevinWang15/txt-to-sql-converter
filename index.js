@@ -2,6 +2,7 @@ var converter = require('./txt-to-sql-converter');
 
 converter({
     input: 'trade2.txt',
+    encoding: 'utf8',
     recordsPerStatement: 200,
     attrMap: function (field) {
         return {
